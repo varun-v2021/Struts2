@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+   "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+   "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.devMode" value="true" />
+	<package name="helloworld" extends="struts-default">
+		<interceptors>
+			<interceptor name="myinterceptor" class="interceptors.MyInterceptor"></interceptor>
+		</interceptors>
+		<action name="hello" class="actions.HelloWorldAction" method="execute">
+			<interceptor-ref name="params"></interceptor-ref> <!-- in-built interceptor -->
+			<interceptor-ref name="timer"></interceptor-ref> <!-- in-built interceptor -->
+			<interceptor-ref name="myinterceptor"></interceptor-ref>
+			<result name="success">/HelloWorld.jsp</result>
+			<result name="error">/AccessDenied.jsp</result>
+		</action>
+	</package>
+
+	<package name="newhelloworld" extends="struts-default">
+		<action name="newhello" class="actions.NewHelloWorldAction"
+			method="execute">
+			<result name="success">/NewHelloWorld.jsp</result>
+			<result name="error" type="redirect">
+				<param name="location">/AccessDenied.jsp</param>
+			</result>
+		</action>
+		<action name="empinfo" class="actions.EmployeeAction" method="execute">
+			<result name="input">/index.jsp</result>
+			<result name="success">/employeeSuccess.jsp</result>
+		</action>
+	</package>
+
+	<constant name="struts.multipart.maxSize" value="1000000" />
+	<constant name="struts.multipart.saveDir"
+		value="D:/apache-tomcat-7.0.82-windows-x64/apache-tomcat-7.0.82/work/" />
+	<package name="fileUpload" extends="struts-default">
+		<action name="upload" class="actions.UploadFileAction">
+			<interceptor-ref name="basicStack" /> <!-- built-in interceptor -->
+			<interceptor-ref name="fileUpload"> <!-- built-in interceptor -->
+				<param name="allowedTypes">image/jpeg,image/gif,text/plain</param>
+			</interceptor-ref>
+			<result name="success">/fileSuccess.jsp</result>
+			<result name="error">/fileError.jsp</result>
+		</action>
+	</package>
+
+	<package name="exceptionWorld" extends="struts-default">
+		<global-exception-mappings>
+			<exception-mapping exception="java.lang.NullPointerException"
+				result="error" />
+		</global-exception-mappings>
+		<action name="exception" class="actions.ExceptionHandlerAction"
+			method="execute">
+			<result name="success">/NewHelloWorld.jsp</result>
+			<result name="error">/ExceptionError.jsp</result>
+		</action>
+	</package>
+</struts>
